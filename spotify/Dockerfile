@@ -12,25 +12,30 @@
 #	granthbr/spotify
 
 
-FROM ubuntu
-#FROM debian:sid
+FROM debian:sid
 MAINTAINER Brandon Grantham <brandon.grantham@gmail.com>
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common
-RUN DEBIAN_FRONTEND=noninteractive apt-add-repository -y "deb http://repository.spotify.com stable non-free" 
-RUN DEBIAN_FRONTEND=noninteractive apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 94558F59 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update -qq 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y --force-yes install spotify-client
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libpangoxft-1.0-0 libpangox-1.0-0 xauth pulseaudio
+RUN	apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886 \
+	&& echo "deb http://repository.spotify.com stable non-free" >> /etc/apt/sources.list.d/spotify.list \
+	&& apt-get update && apt-get install -y \
+	alsa-utils \
+	libgl1-mesa-dri \
+	libgl1-mesa-glx \
+	libpangoxft-1.0-0 \
+	libssl1.0.0 \
+	libxss1 \
+	spotify-client \
+	xdg-utils \
+	--no-install-recommends \
+	&& rm -rf /var/lib/apt/lists/*
 
-ADD start-spotify.sh /usr/bin/start/start-spotify.sh
-
-RUN chmod +x /usr/bin/start-spotify.sh
-
+ENV HOME /home/spotify
 RUN useradd -d /home/spotify -p "!" -m -g audio -c "Docker-Spotify" spotify
+
+WORKDIR $HOME
 USER spotify
 ENV HOME /home/spotify
 
-VOLUME /home/spotify/
+RUN echo "QLineEdit { color: #000 }" > /home/spotify/spotify-override.css
 
 ENTRYPOINT "/usr/bin/start-spotify.sh"
