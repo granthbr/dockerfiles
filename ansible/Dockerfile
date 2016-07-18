@@ -7,6 +7,7 @@
 # 	-v ${HOME}/.ssh:/root/.ssh:ro \
 # 	ansible all -m ping
 #
+
 FROM alpine:latest
 MAINTAINER Christian Koep <christiankoep@gmail.com>
 
