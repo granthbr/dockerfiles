@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  activemq:
+    build: .    
+    container_name: amq
+    volumes_from:
+      - data
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+  data:
+    image: alpine:latest
+    container_name: data
+    volumes:
+      - ./conf:./conf/ 
+volumes:
+  data:
