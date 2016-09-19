@@ -3,7 +3,8 @@
   "AttachStdin": true,
   "OpenStdin": true,
   "Cmd": [
-          "chown -R mongodb /data/configdb /data/db","exec gosu mongodb "$BASH_SOURCE" "itops""
+          "chown -R mongodb /data/configdb /data/db",
+		  "exec gosu mongodb "$BASH_SOURCE" "itops""
   ],
   "HostConfig": {
     "PortBindings":{ "27017/tcp": [{ "HostIp": "0.0.0.0", "HostPort": "27017" }] }
