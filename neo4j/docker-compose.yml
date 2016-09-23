@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  neo4j: 
+   build: . 
+   container_name: neo4jcommunity
+   ports:
+     - "7474:7474"
+   volumes:
+     - neo4j:/data
+volumes:
+  neo4j:
