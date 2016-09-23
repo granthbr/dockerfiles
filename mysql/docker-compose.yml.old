@@ -1,0 +1,48 @@
+version: '2'
+services:
+ datastore:
+  image: busybox:latest
+  volumes:
+   - ./share:/share_to_container
+ db:
+  image: mysql:5.7
+  environment:
+   - MYSQL_ROOT_PASSWORD=mypassword
+  ports:
+   - "3306:3306"
+  volumes:
+   - ./mysql:/mysql
+  volumes_from:
+   - datastore
+ webserver:
+  image: nginx
+  ports:
+   - "8080:80"
+  volumes:
+   - ./nginx/mysite.template:/etc/nginx/conf.d/mysite.template
+  volumes_from:
+   - datastore
+ base:
+  build:
+   context: .
+   dockerfile: gunicorn
+  command: >
+   gunicorn -b 0.0.0.0:1344
+     --access-logfile - 
+     --reload
+     "test.app:create_app()"
+   environment:
+     PYTHONUNBUFFERED: 'true'
+  ports:
+   - "1344:1344"
+   - "8000:8000"
+  volumes:
+   - ./app:/app
+  volumes_from:
+   - datastore
+  depends_on:
+   - db
+   - webserver
+# use depends on instead  links:
+# #   - db
+# #   - webserver
