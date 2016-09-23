@@ -1,3 +1,7 @@
+#### Customized by Brandon Grantham
+simple start for running locally
+docker run -d granthbr/neo4j neo4j
+
 How to use this image
 Start an instance of neo4j
 You can start a Neo4j container like this:
